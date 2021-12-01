@@ -86,6 +86,7 @@ import static datadog.trace.api.config.GeneralConfig.AZURE_APP_SERVICES;
 import static datadog.trace.api.config.GeneralConfig.CONFIGURATION_FILE;
 import static datadog.trace.api.config.GeneralConfig.DOGSTATSD_ARGS;
 import static datadog.trace.api.config.GeneralConfig.DOGSTATSD_HOST;
+import static datadog.trace.api.config.GeneralConfig.DOGSTATSD_NAMED_PIPE;
 import static datadog.trace.api.config.GeneralConfig.DOGSTATSD_PATH;
 import static datadog.trace.api.config.GeneralConfig.DOGSTATSD_PORT;
 import static datadog.trace.api.config.GeneralConfig.DOGSTATSD_START_DELAY;
@@ -350,8 +351,10 @@ public class Config {
   private final Set<PropagationStyle> propagationStylesToExtract;
   private final Set<PropagationStyle> propagationStylesToInject;
 
-  private final boolean jmxFetchEnabled;
+  private final String dogStatsDNamedPipe;
   private final int dogStatsDStartDelay;
+
+  private final boolean jmxFetchEnabled;
   private final String jmxFetchConfigDir;
   private final List<String> jmxFetchConfigs;
   @Deprecated private final List<String> jmxFetchMetricsConfigs;
@@ -710,6 +713,8 @@ public class Config {
     propagationStylesToInject =
         getPropagationStyleSetSettingFromEnvironmentOrDefault(
             PROPAGATION_STYLE_INJECT, DEFAULT_PROPAGATION_STYLE_INJECT);
+
+    dogStatsDNamedPipe = configProvider.getString(DOGSTATSD_NAMED_PIPE);
 
     dogStatsDStartDelay =
         configProvider.getInteger(
@@ -1167,6 +1172,10 @@ public class Config {
 
   public Set<PropagationStyle> getPropagationStylesToInject() {
     return propagationStylesToInject;
+  }
+
+  public String getDogStatsDNamedPipe() {
+    return dogStatsDNamedPipe;
   }
 
   public int getDogStatsDStartDelay() {
